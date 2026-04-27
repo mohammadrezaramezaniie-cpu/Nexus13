@@ -1,0 +1,2276 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#080C14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>NEXUS — AI Financial Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════ */
+:root {
+  --bg0: #080C14;
+  --bg1: #0C1220;
+  --bg2: #111829;
+  --bg3: #172033;
+  --bg4: #1E2A40;
+  --bg5: #253248;
+
+  --gold:    #E8B84B;
+  --gold2:   #C89A2E;
+  --goldA:   rgba(232,184,75,.12);
+  --goldAA:  rgba(232,184,75,.06);
+
+  --mint:    #0DD9A0;
+  --mintA:   rgba(13,217,160,.10);
+
+  --blue:    #3B82F6;
+  --blueA:   rgba(59,130,246,.10);
+
+  --rose:    #F43F5E;
+  --roseA:   rgba(244,63,94,.10);
+
+  --violet:  #A78BFA;
+  --violetA: rgba(167,139,250,.10);
+
+  --amber:   #F59E0B;
+  --amberA:  rgba(245,158,11,.10);
+
+  --t1: #F0F4FF;
+  --t2: #8896B3;
+  --t3: #3A4A6A;
+  --t4: #1E2A40;
+
+  --bd:  rgba(255,255,255,.06);
+  --bd2: rgba(255,255,255,.10);
+
+  --r1: 12px;
+  --r2: 18px;
+  --r3: 24px;
+  --r4: 32px;
+
+  --fa: 'Vazirmatn', sans-serif;
+  --en: 'Outfit', sans-serif;
+  --mono: 'DM Mono', monospace;
+
+  --font: var(--fa);
+  --dir: rtl;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bot: env(safe-area-inset-bottom, 0px);
+}
+
+/* ══ RESET ══ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { height: 100%; overflow: hidden; }
+body {
+  font-family: var(--font);
+  background: var(--bg0);
+  color: var(--t1);
+  height: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  direction: var(--dir);
+}
+button { cursor: pointer; border: none; outline: none; background: none; font-family: inherit; }
+input, textarea { font-family: inherit; }
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
+
+/* ══ LANG ══ */
+.fa, .en { display: none !important; }
+body.lang-fa .fa { display: inline !important; }
+body.lang-en .en { display: inline !important; }
+body.lang-fa .fa-block { display: block !important; }
+body.lang-en .en-block { display: block !important; }
+.fa-block, .en-block { display: none !important; }
+
+/* ══ BACKGROUND MESH ══ */
+.mesh {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+.mesh-orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); animation: float 18s ease-in-out infinite;
+}
+.m1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(232,184,75,.06), transparent 70%); top: -150px; right: -150px; }
+.m2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(13,217,160,.04), transparent 70%); bottom: -100px; left: -100px; animation-delay: -6s; }
+.m3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(59,130,246,.03), transparent 70%); top: 40%; left: 25%; animation-delay: -12s; }
+@keyframes float {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(24px,-28px) scale(1.03); }
+  66% { transform: translate(-18px,22px) scale(.97); }
+}
+
+/* ══ SCREENS ══ */
+.screen {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  overflow: hidden; z-index: 10;
+  background: var(--bg0);
+  visibility: hidden; opacity: 0;
+  transition: opacity .3s, visibility .3s;
+}
+.screen.active {
+  visibility: visible; opacity: 1;
+}
+
+/* ══════════════════════════════════════════
+   LANGUAGE SELECTION SCREEN
+══════════════════════════════════════════ */
+#s-lang {
+  align-items: center; justify-content: center;
+}
+.lang-container {
+  width: 100%; max-width: 380px;
+  padding: 40px 28px;
+  text-align: center;
+  position: relative; z-index: 1;
+}
+.logo-mark {
+  width: 80px; height: 80px;
+  border-radius: 26px;
+  background: linear-gradient(145deg, var(--gold), var(--gold2));
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 28px;
+  box-shadow: 0 16px 48px rgba(232,184,75,.3), 0 0 0 1px rgba(232,184,75,.2);
+  position: relative;
+}
+.logo-mark::after {
+  content: '';
+  position: absolute; inset: -8px;
+  border-radius: 34px;
+  border: 1px solid rgba(232,184,75,.12);
+}
+.logo-mark svg { width: 40px; height: 40px; }
+.brand-name {
+  font-family: var(--en);
+  font-size: 48px; font-weight: 900;
+  letter-spacing: 10px;
+  color: var(--t1);
+  margin-bottom: 6px;
+}
+.brand-tag {
+  font-family: var(--en);
+  font-size: 11px; color: var(--t2);
+  letter-spacing: 4px;
+  margin-bottom: 52px;
+}
+.lang-prompt {
+  font-size: 13px; color: var(--t2);
+  margin-bottom: 22px;
+  line-height: 1.8;
+}
+.lang-cards {
+  display: flex; gap: 14px;
+}
+.lang-card {
+  flex: 1;
+  padding: 26px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--bd);
+  border-radius: var(--r3);
+  cursor: pointer;
+  transition: all .25s cubic-bezier(.4,0,.2,1);
+  position: relative; overflow: hidden;
+}
+.lang-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--goldAA), transparent);
+  opacity: 0; transition: opacity .25s;
+}
+.lang-card:hover, .lang-card:active {
+  border-color: var(--gold);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(232,184,75,.15);
+}
+.lang-card:hover::before, .lang-card:active::before { opacity: 1; }
+.lang-flag { font-size: 38px; margin-bottom: 12px; }
+.lang-label { font-size: 18px; font-weight: 700; color: var(--t1); margin-bottom: 4px; }
+.lang-sublabel { font-size: 12px; color: var(--t2); font-family: var(--en); }
+.lang-card:first-child .lang-label { font-family: var(--fa); }
+.lang-card:last-child .lang-label { font-family: var(--en); }
+
+/* ══════════════════════════════════════════
+   ONBOARDING SCREEN
+══════════════════════════════════════════ */
+#s-onboard { z-index: 15; }
+.ob-scroll {
+  flex: 1; overflow-y: auto;
+  padding-bottom: 120px;
+  position: relative; z-index: 1;
+}
+.ob-hero {
+  padding: 56px 24px 0;
+  text-align: center;
+}
+.ob-logo {
+  width: 60px; height: 60px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, var(--gold), var(--gold2));
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 8px 24px rgba(232,184,75,.25);
+}
+.ob-logo svg { width: 28px; height: 28px; }
+.ob-brand { font-family: var(--en); font-size: 28px; font-weight: 900; letter-spacing: 7px; margin-bottom: 4px; }
+.ob-subtitle { font-size: 12px; color: var(--t2); letter-spacing: 2px; margin-bottom: 36px; }
+
+/* Steps indicator */
+.steps-bar {
+  display: flex; gap: 6px;
+  padding: 0 24px 28px;
+  position: relative; z-index: 1;
+}
+.step-dot {
+  flex: 1; height: 2px; border-radius: 1px;
+  background: var(--bg4); transition: all .4s;
+}
+.step-dot.done { background: var(--gold2); }
+.step-dot.active { background: linear-gradient(90deg, var(--gold), var(--mint)); }
+
+/* Step content */
+.ob-body { padding: 0 24px; position: relative; z-index: 1; }
+.ob-step { display: none; }
+.ob-step.active { display: block; animation: stepIn .35s cubic-bezier(.34,1.56,.64,1); }
+@keyframes stepIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.step-num {
+  font-family: var(--en); font-size: 11px; font-weight: 600;
+  color: var(--gold); letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.step-title { font-size: 22px; font-weight: 800; margin-bottom: 6px; line-height: 1.3; }
+.step-desc { font-size: 13px; color: var(--t2); margin-bottom: 26px; line-height: 1.7; }
+
+/* Form fields */
+.field { margin-bottom: 14px; }
+.field-label { font-size: 12px; color: var(--t2); font-weight: 500; margin-bottom: 7px; display: block; }
+.field-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--bd);
+  border-radius: var(--r1);
+  color: var(--t1); font-size: 15px; font-weight: 500;
+  outline: none; transition: border-color .25s;
+  -webkit-appearance: none;
+}
+.field-input:focus { border-color: var(--gold); }
+.field-input::placeholder { color: var(--t3); }
+.field-input[type="number"] { font-family: var(--mono); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* Bank grid */
+.bank-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  margin-bottom: 16px;
+}
+.bank-btn {
+  padding: 14px 8px;
+  background: var(--bg2); border: 1px solid var(--bd);
+  border-radius: var(--r1);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  cursor: pointer; transition: all .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.bank-btn.sel { border-color: var(--gold); background: var(--goldAA); }
+.bank-icon {
+  width: 38px; height: 38px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.bank-name {
+  font-size: 11px; color: var(--t2); font-weight: 500; text-align: center;
+  transition: color .2s;
+}
+.bank-btn.sel .bank-name { color: var(--gold); }
+
+/* Onboard footer */
+.ob-footer {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  padding: 14px 24px calc(14px + var(--safe-bot));
+  background: linear-gradient(to top, var(--bg0) 60%, transparent);
+  display: flex; gap: 12px; align-items: center;
+  z-index: 20;
+}
+.btn-primary {
+  flex: 1; padding: 16px; border-radius: var(--r2);
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #0A0600; font-size: 15px; font-weight: 700;
+  box-shadow: 0 8px 24px rgba(232,184,75,.3);
+  transition: transform .15s, box-shadow .15s;
+  font-family: inherit;
+}
+.btn-primary:active { transform: scale(.97); box-shadow: 0 4px 12px rgba(232,184,75,.2); }
+.btn-back {
+  width: 52px; height: 52px; border-radius: var(--r1);
+  background: var(--bg2); border: 1px solid var(--bd);
+  color: var(--t2); display: none; align-items: center; justify-content: center;
+  transition: border-color .2s;
+}
+.btn-back:active { border-color: var(--gold); }
+.btn-back.show { display: flex; }
+
+/* Asset type chips */
+.asset-chips {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  margin-bottom: 16px;
+}
+.asset-chip {
+  padding: 11px 6px;
+  background: var(--bg2); border: 1px solid var(--bd);
+  border-radius: var(--r1);
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  cursor: pointer; transition: all .2s;
+}
+.asset-chip.sel { border-color: var(--gold); background: var(--goldAA); }
+.chip-icon { font-size: 20px; }
+.chip-label { font-size: 10px; color: var(--t2); font-weight: 500; text-align: center; transition: color .2s; }
+.asset-chip.sel .chip-label { color: var(--gold); }
+
+/* crypto/forex dynamic fields */
+.dynamic-fields { display: none; margin-bottom: 14px; }
+.dynamic-fields.show { display: block; }
+
+/* ══════════════════════════════════════════
+   MAIN APP SCREEN
+══════════════════════════════════════════ */
+#s-app {
+  display: flex !important;
+  flex-direction: column;
+  visibility: hidden; opacity: 0;
+}
+#s-app.active { visibility: visible; opacity: 1; }
+
+/* Pages container */
+.pages {
+  flex: 1; position: relative; overflow: hidden;
+}
+.page {
+  position: absolute; inset: 0;
+  overflow-y: auto;
+  padding-bottom: calc(80px + var(--safe-bot));
+  display: none; flex-direction: column;
+  animation: pageIn .3s ease;
+}
+.page.active { display: flex; }
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Top Bar ── */
+.topbar {
+  padding: calc(52px + var(--safe-top)) 20px 14px;
+  display: flex; align-items: flex-end;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.topbar-left .greeting { font-size: 12px; color: var(--t2); font-weight: 500; margin-bottom: 3px; }
+.topbar-left .username { font-size: 22px; font-weight: 800; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.icon-btn {
+  width: 40px; height: 40px; border-radius: 13px;
+  background: var(--bg2); border: 1px solid var(--bd);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: border-color .2s; position: relative;
+  flex-shrink: 0;
+}
+.icon-btn:active { border-color: var(--gold); }
+.notif-pip {
+  position: absolute; top: 8px; right: 8px;
+  width: 7px; height: 7px;
+  background: var(--rose); border-radius: 50%;
+  border: 2px solid var(--bg0);
+}
+.avatar {
+  width: 40px; height: 40px; border-radius: 13px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--en); font-size: 15px; font-weight: 800; color: #0A0600;
+  cursor: pointer; flex-shrink: 0;
+}
+.lang-btn {
+  font-family: var(--en); font-size: 11px; font-weight: 700; color: var(--t2);
+}
+
+/* ── Balance Card ── */
+.balance-card {
+  margin: 0 16px 18px;
+  border-radius: var(--r3);
+  background: linear-gradient(145deg, #0F1A2E 0%, #0A1220 60%, #060D1A 100%);
+  border: 1px solid rgba(232,184,75,.15);
+  padding: 22px;
+  position: relative; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+  flex-shrink: 0;
+}
+.bc-shine {
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,184,75,.4), transparent);
+}
+.bc-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+.bc-glow {
+  position: absolute; top: -40px; right: -40px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(232,184,75,.08), transparent 70%);
+  border-radius: 50%;
+}
+.bc-tag {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11px; color: var(--t2); font-weight: 500;
+  margin-bottom: 14px; position: relative; z-index: 1;
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--mint); flex-shrink: 0;
+  animation: livePulse 2s infinite;
+}
+@keyframes livePulse {
+  0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(13,217,160,.4); }
+  50%      { box-shadow: 0 0 0 6px rgba(13,217,160,0); }
+}
+.bc-amount {
+  font-family: var(--mono);
+  font-size: 34px; font-weight: 500;
+  color: var(--t1); letter-spacing: -1px;
+  margin-bottom: 4px; position: relative; z-index: 1;
+  line-height: 1.1;
+}
+.bc-currency { font-size: 14px; font-weight: 400; color: var(--t2); margin: 0 6px; }
+.bc-change {
+  font-size: 12px; color: var(--mint); font-weight: 600;
+  margin-bottom: 18px; position: relative; z-index: 1;
+  font-family: var(--en); display: flex; align-items: center; gap: 5px;
+}
+.bc-divider { height: 1px; background: var(--bd); margin-bottom: 14px; position: relative; z-index: 1; }
+.bc-stats { display: flex; gap: 0; position: relative; z-index: 1; }
+.bc-stat { flex: 1; }
+.bc-stat + .bc-stat {
+  border-right: 1px solid var(--bd);
+}
+body.lang-en .bc-stat + .bc-stat {
+  border-right: none;
+  border-left: 1px solid var(--bd);
+}
+.bc-stat { padding: 0 12px; }
+.bc-stat:first-child { padding-right: 0; }
+.bc-stat:last-child { padding-left: 0; }
+body.lang-en .bc-stat:first-child { padding-left: 0; padding-right: 12px; }
+body.lang-en .bc-stat:last-child { padding-right: 0; padding-left: 12px; }
+.bc-stat-label { font-size: 11px; color: var(--t2); margin-bottom: 4px; font-weight: 500; }
+.bc-stat-val { font-size: 14px; font-weight: 700; font-family: var(--mono); }
+
+/* ── Quick Actions ── */
+.quick-actions {
+  padding: 0 16px 18px;
+  display: flex; gap: 10px; overflow-x: auto;
+  flex-shrink: 0;
+}
+.qa-item { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 7px; width: 64px; cursor: pointer; }
+.qa-icon {
+  width: 50px; height: 50px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg2); border: 1px solid var(--bd);
+  transition: all .2s;
+}
+.qa-item:active .qa-icon { transform: scale(.92); border-color: var(--gold); }
+.qa-label { font-size: 11px; color: var(--t2); font-weight: 500; text-align: center; white-space: nowrap; }
+
+/* ── Section ── */
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; margin-bottom: 10px; flex-shrink: 0;
+}
+.section-title { font-size: 15px; font-weight: 700; }
+.section-action { font-size: 12px; color: var(--gold); font-weight: 600; cursor: pointer; }
+
+/* ── AI Insights Strip ── */
+.insights-scroll {
+  display: flex; gap: 10px;
+  padding: 0 16px 16px; overflow-x: auto; flex-shrink: 0;
+}
+.insight-card {
+  flex-shrink: 0; width: 210px; padding: 15px;
+  border-radius: var(--r2); border: 1px solid var(--bd);
+  background: var(--bg1); cursor: pointer;
+  transition: transform .2s;
+  position: relative; overflow: hidden;
+}
+.insight-card:active { transform: scale(.97); }
+.insight-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--card-color, transparent), transparent);
+  opacity: .06;
+}
+.insight-card.warn { --card-color: var(--rose); border-color: rgba(244,63,94,.2); }
+.insight-card.ok   { --card-color: var(--mint); border-color: rgba(13,217,160,.15); }
+.insight-card.info { --card-color: var(--blue); border-color: rgba(59,130,246,.15); }
+.insight-card.tip  { --card-color: var(--gold); border-color: rgba(232,184,75,.15); }
+.ins-icon { font-size: 20px; margin-bottom: 8px; }
+.ins-badge {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 6px; margin-bottom: 7px;
+  font-family: var(--en);
+}
+.ins-title { font-size: 13px; font-weight: 700; margin-bottom: 5px; line-height: 1.35; }
+.ins-body { font-size: 11px; color: var(--t2); line-height: 1.55; }
+
+/* ── Accounts Page ── */
+.account-card {
+  margin: 0 16px 12px;
+  background: var(--bg1); border: 1px solid var(--bd);
+  border-radius: var(--r2); padding: 18px;
+  flex-shrink: 0;
+}
+.acc-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.acc-logo {
+  width: 44px; height: 44px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.acc-info { flex: 1; min-width: 0; }
+.acc-name { font-size: 15px; font-weight: 700; }
+.acc-number { font-size: 11px; color: var(--t2); font-family: var(--mono); margin-top: 2px; }
+.acc-balance { font-size: 17px; font-weight: 700; font-family: var(--mono); color: var(--gold); flex-shrink: 0; }
+.acc-txns { border-top: 1px solid var(--bd); padding-top: 12px; display: flex; flex-direction: column; gap: 9px; }
+.txn-row { display: flex; align-items: center; justify-content: space-between; }
+.txn-left { display: flex; align-items: center; gap: 10px; }
+.txn-icon { width: 32px; height: 32px; border-radius: 10px; background: var(--bg3); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.txn-desc { font-size: 13px; font-weight: 500; }
+.txn-date { font-size: 11px; color: var(--t2); font-family: var(--en); margin-top: 1px; }
+.txn-amount { font-size: 13px; font-weight: 700; font-family: var(--mono); flex-shrink: 0; }
+.txn-amount.pos { color: var(--mint); }
+.txn-amount.neg { color: var(--rose); }
+
+/* ── Wealth Page ── */
+.wealth-hero {
+  margin: 0 16px 14px;
+  background: var(--bg1); border: 1px solid var(--bd);
+  border-radius: var(--r2); padding: 18px; text-align: center;
+  flex-shrink: 0;
+}
+.wealth-label { font-size: 12px; color: var(--t2); font-weight: 500; margin-bottom: 6px; }
+.wealth-value { font-family: var(--mono); font-size: 30px; font-weight: 500; letter-spacing: -1px; }
+.wealth-sub { font-size: 12px; color: var(--t2); margin-top: 5px; }
+
+/* Ticker */
+.ticker-row {
+  padding: 0 16px 14px; display: flex; gap: 8px; overflow-x: auto;
+  flex-shrink: 0;
+}
+.ticker-card {
+  flex-shrink: 0; padding: 10px 12px;
+  background: var(--bg1); border: 1px solid var(--bd);
+  border-radius: var(--r1); min-width: 90px;
+}
+.ticker-name { font-size: 10px; color: var(--t2); font-weight: 600; margin-bottom: 3px; font-family: var(--en); }
+.ticker-price { font-size: 13px; font-weight: 700; font-family: var(--mono); margin-bottom: 2px; }
+.ticker-change { font-size: 11px; font-weight: 600; font-family: var(--en); }
+.ticker-change.up { color: var(--mint); }
+.ticker-change.dn { color: var(--rose); }
+.ticker-loading { display: flex; gap: 4px; padding: 10px; }
+.ticker-loading span { width: 6px; height: 6px; border-radius: 50%; background: var(--t3); animation: blink 1.4s infinite; }
+.ticker-loading span:nth-child(2) { animation-delay: .2s; }
+.ticker-loading span:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%,80%,100%{opacity:.3} 40%{opacity:1} }
+
+/* Asset Grid */
+.asset-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 10px; padding: 0 16px; margin-bottom: 14px;
+  flex-shrink: 0;
+}
+.asset-card {
+  padding: 15px; border-radius: var(--r2);
+  background: var(--bg1); border: 1px solid var(--bd);
+  position: relative;
+}
+.asset-del {
+  position: absolute; top: 10px; left: 10px;
+  width: 22px; height: 22px; border-radius: 7px;
+  background: var(--bg3); display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--t2); cursor: pointer; transition: all .2s;
+}
+body.lang-en .asset-del { right: 10px; left: auto; }
+.asset-del:hover { background: var(--roseA); color: var(--rose); }
+.asset-ico-wrap {
+  width: 38px; height: 38px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 9px;
+}
+.asset-type-label { font-size: 10px; color: var(--t2); font-weight: 500; margin-bottom: 4px; }
+.asset-value { font-family: var(--mono); font-size: 16px; font-weight: 500; }
+.asset-qty { font-size: 10px; color: var(--t2); margin-top: 3px; font-family: var(--mono); }
+
+.add-asset-btn {
+  margin: 0 16px 18px;
+  padding: 14px; border-radius: var(--r2);
+  border: 1.5px dashed rgba(232,184,75,.3);
+  background: var(--goldAA);
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  color: var(--gold); font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all .2s; font-family: inherit;
+  flex-shrink: 0;
+}
+.add-asset-btn:active { background: var(--goldA); }
+
+/* ── Insights Page ── */
+.kpi-grid {
+  display: grid; grid-template-columns: repeat(2,1fr);
+  gap: 10px; padding: 0 16px; margin-bottom: 14px;
+  flex-shrink: 0;
+}
+.kpi-card {
+  padding: 15px; border-radius: var(--r2);
+  background: var(--bg1); border: 1px solid var(--bd);
+}
+.kpi-label { font-size: 11px; color: var(--t2); font-weight: 500; margin-bottom: 5px; }
+.kpi-value { font-family: var(--mono); font-size: 24px; font-weight: 500; margin-bottom: 3px; }
+.kpi-status { font-size: 10px; font-weight: 600; }
+
+/* Chart cards */
+.chart-card {
+  margin: 0 16px 12px; padding: 18px;
+  background: var(--bg1); border: 1px solid var(--bd);
+  border-radius: var(--r2); flex-shrink: 0;
+}
+.chart-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+
+/* Bar Chart */
+.bar-chart-wrap { overflow-x: auto; }
+.bar-chart {
+  display: flex; gap: 0; align-items: flex-end;
+  height: 110px; min-width: 100%;
+}
+.bar-group { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 44px; }
+.bar-pair { display: flex; gap: 3px; align-items: flex-end; width: 100%; justify-content: center; height: 90px; }
+.bar {
+  width: 13px; border-radius: 4px 4px 0 0;
+  min-height: 4px; position: relative; cursor: pointer;
+  transition: height .6s cubic-bezier(.4,0,.2,1);
+}
+.bar::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 5px);
+  left: 50%; transform: translateX(-50%);
+  background: var(--bg5); border: 1px solid var(--bd2);
+  border-radius: 7px; padding: 3px 7px;
+  font-size: 10px; font-family: var(--mono); color: var(--t1);
+  white-space: nowrap; pointer-events: none;
+  opacity: 0; transition: opacity .15s;
+  z-index: 10;
+}
+.bar:hover::after { opacity: 1; }
+.bar-month { font-size: 9px; color: var(--t3); margin-top: 6px; font-family: var(--en); text-align: center; }
+.chart-legend { display: flex; gap: 14px; margin-top: 10px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--t2); }
+.legend-dot { width: 8px; height: 8px; border-radius: 3px; flex-shrink: 0; }
+
+/* Donut Chart */
+.donut-area { display: flex; align-items: center; gap: 18px; }
+.donut-svg { flex-shrink: 0; }
+.donut-circle { transition: stroke-dasharray .7s cubic-bezier(.4,0,.2,1); }
+.donut-legend { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+.donut-row { display: flex; align-items: center; gap: 8px; }
+.donut-dot { width: 8px; height: 8px; border-radius: 3px; flex-shrink: 0; }
+.donut-name { flex: 1; font-size: 11px; color: var(--t2); }
+.donut-pct { font-size: 10px; color: var(--t3); font-family: var(--mono); margin-left: 2px; }
+.donut-amt { font-size: 11px; font-weight: 700; font-family: var(--mono); }
+
+/* Expense table */
+.exp-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+.exp-table th {
+  font-size: 10px; color: var(--t2); font-weight: 600;
+  padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--bd);
+}
+body.lang-en .exp-table th { text-align: left; }
+.exp-table td { font-size: 12px; padding: 8px 8px; border-bottom: 1px solid rgba(255,255,255,.02); }
+.exp-cat-cell { display: flex; align-items: center; gap: 8px; }
+.exp-color-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.exp-bar-wrap { width: 70px; height: 5px; background: var(--bg4); border-radius: 3px; overflow: hidden; }
+.exp-bar-fill { height: 100%; border-radius: 3px; }
+.exp-amount { font-family: var(--mono); font-weight: 600; text-align: left; }
+body.lang-fa .exp-amount { text-align: right; }
+
+/* Net worth trend */
+.trend-wrap { height: 80px; position: relative; }
+.trend-svg { width: 100%; height: 100%; overflow: visible; }
+.trend-labels { display: flex; justify-content: space-between; margin-top: 5px; }
+.trend-label { font-size: 9px; color: var(--t3); font-family: var(--en); }
+
+/* ── Market Page ── */
+.ai-analysis-card {
+  margin: 0 16px 12px; padding: 18px;
+  background: linear-gradient(135deg, rgba(167,139,250,.08), var(--bg1));
+  border: 1px solid rgba(167,139,250,.18);
+  border-radius: var(--r2); flex-shrink: 0;
+}
+.ai-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px; border-radius: 20px;
+  background: rgba(167,139,250,.12); border: 1px solid rgba(167,139,250,.2);
+  font-size: 11px; font-weight: 700; color: var(--violet);
+  margin-bottom: 14px;
+}
+.ai-ratios {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; margin-bottom: 14px;
+}
+.ai-ratio { padding: 12px; background: var(--bg3); border-radius: 12px; }
+.ai-ratio-label { font-size: 10px; color: var(--t2); font-weight: 500; margin-bottom: 4px; }
+.ai-ratio-value { font-family: var(--mono); font-size: 16px; font-weight: 500; }
+.ai-ratio-note { font-size: 10px; color: var(--t2); margin-top: 2px; }
+.ai-rec { display: flex; align-items: flex-start; gap: 10px; padding: 12px; background: var(--bg3); border-radius: 12px; margin-bottom: 8px; }
+.ai-rec-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+.ai-rec-text { font-size: 12px; color: var(--t2); line-height: 1.55; }
+.ai-rec-text strong { color: var(--t1); font-weight: 600; }
+
+.product-card {
+  margin: 0 16px 12px; padding: 17px;
+  background: var(--bg1); border: 1px solid var(--bd);
+  border-radius: var(--r2); flex-shrink: 0;
+}
+.prod-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.prod-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 22px; }
+.prod-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.prod-cat { font-size: 11px; color: var(--t2); font-weight: 500; }
+.prod-badge { display: inline-flex; padding: 3px 9px; border-radius: 7px; font-size: 10px; font-weight: 700; margin-bottom: 9px; }
+.prod-desc { font-size: 12px; color: var(--t2); line-height: 1.55; margin-bottom: 10px; }
+.prod-stats { display: flex; gap: 8px; margin-bottom: 11px; }
+.prod-stat { flex: 1; text-align: center; padding: 9px 0; background: var(--bg3); border-radius: 9px; }
+.prod-stat-val { font-family: var(--mono); font-size: 13px; font-weight: 600; }
+.prod-stat-label { font-size: 10px; color: var(--t2); margin-top: 2px; }
+.prod-cta {
+  width: 100%; padding: 12px; border-radius: var(--r1);
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  font-family: inherit; transition: transform .15s;
+}
+.prod-cta:active { transform: scale(.97); }
+
+/* ── Bottom Nav ── */
+.bottom-nav {
+  height: calc(66px + var(--safe-bot));
+  background: var(--bg1); border-top: 1px solid var(--bd);
+  display: flex; align-items: flex-start; padding-top: 10px;
+  flex-shrink: 0; position: relative; z-index: 10;
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  gap: 3px; cursor: pointer; padding: 2px 0;
+  position: relative; transition: all .2s;
+}
+.nav-item svg { width: 21px; height: 21px; stroke: var(--t3); fill: none; stroke-width: 1.8; transition: stroke .25s; }
+.nav-item span { font-size: 10px; color: var(--t3); font-weight: 500; transition: color .25s; }
+.nav-item.active svg { stroke: var(--gold); }
+.nav-item.active span { color: var(--gold); }
+.nav-pip { position: absolute; bottom: -4px; width: 4px; height: 4px; border-radius: 50%; background: var(--gold); opacity: 0; transition: opacity .25s; }
+.nav-item.active .nav-pip { opacity: 1; }
+
+/* ── Asset Modal ── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,.65);
+  display: none; align-items: flex-end;
+  backdrop-filter: blur(8px);
+}
+.modal-overlay.open { display: flex; animation: fadeIn .2s; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.modal-sheet {
+  width: 100%;
+  background: var(--bg1); border: 1px solid var(--bd2);
+  border-radius: 26px 26px 0 0;
+  padding: 20px 20px calc(30px + var(--safe-bot));
+  animation: slideUp .35s cubic-bezier(.34,1.56,.64,1);
+  max-height: 80vh; overflow-y: auto;
+}
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.modal-handle { width: 36px; height: 4px; background: var(--bg5); border-radius: 2px; margin: 0 auto 18px; }
+.modal-title { font-size: 18px; font-weight: 800; margin-bottom: 18px; }
+
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: calc(90px + var(--safe-bot));
+  left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--bg4); border: 1px solid var(--bd2);
+  border-radius: 50px; padding: 10px 20px;
+  font-size: 13px; font-weight: 500;
+  opacity: 0; transition: all .3s; pointer-events: none;
+  white-space: nowrap; z-index: 999;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Live badge ── */
+.live-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 8px; background: var(--mintA);
+  border-radius: 6px; font-size: 10px; font-weight: 700; color: var(--mint);
+  font-family: var(--en);
+}
+.live-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--mint); animation: livePulse 1.5s infinite; }
+
+/* ── Settings Panel ── */
+.settings-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,.7); backdrop-filter: blur(8px);
+  display: none; align-items: flex-end;
+}
+.settings-overlay.open { display: flex; animation: fadeIn .2s; }
+.settings-sheet {
+  width: 100%; background: var(--bg1); border: 1px solid var(--bd2);
+  border-radius: 26px 26px 0 0;
+  padding: 20px 20px calc(30px + var(--safe-bot));
+  animation: slideUp .35s cubic-bezier(.34,1.56,.64,1);
+}
+.settings-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0; border-bottom: 1px solid var(--bd);
+}
+.settings-row:last-child { border-bottom: none; }
+.settings-label { font-size: 14px; font-weight: 500; }
+.settings-sublabel { font-size: 12px; color: var(--t2); margin-top: 2px; }
+.settings-action {
+  font-size: 13px; font-weight: 600; color: var(--gold); cursor: pointer;
+}
+.settings-danger { color: var(--rose); }
+
+/* ── RTL / LTR helpers ── */
+body.lang-en {
+  --dir: ltr;
+  --font: var(--en);
+}
+body.lang-en .topbar { flex-direction: row; }
+body.lang-en .bc-stats { flex-direction: row; }
+body.lang-en .quick-actions { flex-direction: row; }
+</style>
+</head>
+<body class="lang-fa">
+<div class="mesh"><div class="mesh-orb m1"></div><div class="mesh-orb m2"></div><div class="mesh-orb m3"></div></div>
+
+<!-- ══ LANGUAGE SELECTION ══ -->
+<div class="screen active" id="s-lang">
+  <div class="lang-container">
+    <div class="logo-mark">
+      <svg viewBox="0 0 40 40" fill="none">
+        <path d="M20 4L34 12V28L20 36L6 28V12Z" stroke="#0A0600" stroke-width="2" fill="rgba(10,6,0,.15)"/>
+        <circle cx="20" cy="20" r="4.5" fill="#0A0600"/>
+        <path d="M20 4V20M20 20L34 12M20 20L6 12M20 20L34 28M20 20L6 28M20 20V36" stroke="#0A0600" stroke-width="1.3" opacity=".5"/>
+      </svg>
+    </div>
+    <div class="brand-name">NEXUS</div>
+    <div class="brand-tag">AI FINANCIAL PLATFORM</div>
+    <div class="lang-prompt">Choose your language<br>زبان خود را انتخاب کنید</div>
+    <div class="lang-cards">
+      <div class="lang-card" onclick="App.setLang('fa')">
+        <div class="lang-flag">🇮🇷</div>
+        <div class="lang-label">فارسی</div>
+        <div class="lang-sublabel">Persian</div>
+      </div>
+      <div class="lang-card" onclick="App.setLang('en')">
+        <div class="lang-flag">🌐</div>
+        <div class="lang-label">English</div>
+        <div class="lang-sublabel">International</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ONBOARDING ══ -->
+<div class="screen" id="s-onboard">
+  <div class="ob-scroll">
+    <div class="ob-hero">
+      <div class="ob-logo">
+        <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+          <path d="M20 4L34 12V28L20 36L6 28V12Z" stroke="#0A0600" stroke-width="2" fill="rgba(10,6,0,.15)"/>
+          <circle cx="20" cy="20" r="4.5" fill="#0A0600"/>
+        </svg>
+      </div>
+      <div class="ob-brand">NEXUS</div>
+      <div class="ob-subtitle fa">پلتفرم مالی هوشمند</div>
+      <div class="ob-subtitle en">AI FINANCIAL PLATFORM</div>
+    </div>
+
+    <div class="steps-bar">
+      <div class="step-dot active" id="dot-1"></div>
+      <div class="step-dot" id="dot-2"></div>
+      <div class="step-dot" id="dot-3"></div>
+    </div>
+
+    <div class="ob-body">
+      <!-- STEP 1: Profile -->
+      <div class="ob-step active" id="step-1">
+        <div class="step-num">
+          <span class="fa">مرحله ۱ از ۳</span>
+          <span class="en">STEP 1 OF 3</span>
+        </div>
+        <div class="step-title">
+          <span class="fa">پروفایل مالی</span>
+          <span class="en">Financial Profile</span>
+        </div>
+        <div class="step-desc">
+          <span class="fa">این اطلاعات به NEXUS کمک می‌کند تحلیل دقیق‌تری ارائه دهد.</span>
+          <span class="en">This helps NEXUS AI deliver accurate personalized insights.</span>
+        </div>
+        <div class="field">
+          <label class="field-label">
+            <span class="fa">نام شما</span>
+            <span class="en">Your Name</span>
+          </label>
+          <input class="field-input" id="f-name" type="text" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="field-label">
+            <span class="fa">درآمد ماهانه (تومان)</span>
+            <span class="en">Monthly Income (Toman)</span>
+          </label>
+          <input class="field-input" id="f-income" type="number" inputmode="numeric">
+        </div>
+        <div class="field">
+          <label class="field-label">
+            <span class="fa">هزینه ماهانه (تومان)</span>
+            <span class="en">Monthly Expenses (Toman)</span>
+          </label>
+          <input class="field-input" id="f-expense" type="number" inputmode="numeric">
+        </div>
+      </div>
+
+      <!-- STEP 2: Banks -->
+      <div class="ob-step" id="step-2">
+        <div class="step-num">
+          <span class="fa">مرحله ۲ از ۳</span>
+          <span class="en">STEP 2 OF 3</span>
+        </div>
+        <div class="step-title">
+          <span class="fa">بانک‌های من</span>
+          <span class="en">My Banks</span>
+        </div>
+        <div class="step-desc">
+          <span class="fa">بانک‌هایی که حساب دارید را انتخاب کنید (اختیاری).</span>
+          <span class="en">Select your banks — optional, you can skip.</span>
+        </div>
+        <div class="bank-grid" id="bank-grid">
+          <div class="bank-btn" data-bank="mellat" onclick="App.toggleBank(this)">
+            <div class="bank-icon" style="background:linear-gradient(135deg,#1565C0,#0D47A1)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><rect x="2" y="6" width="20" height="14" rx="3"/><path d="M2 10h20M6 14h2M10 14h4"/></svg>
+            </div>
+            <div class="bank-name"><span class="fa">ملت</span><span class="en">Mellat</span></div>
+          </div>
+          <div class="bank-btn" data-bank="melli" onclick="App.toggleBank(this)">
+            <div class="bank-icon" style="background:linear-gradient(135deg,#B71C1C,#7F0000)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><rect x="2" y="6" width="20" height="14" rx="3"/><path d="M2 10h20M6 14h2M10 14h4"/></svg>
+            </div>
+            <div class="bank-name"><span class="fa">ملی</span><span class="en">Melli</span></div>
+          </div>
+          <div class="bank-btn" data-bank="saderat" onclick="App.toggleBank(this)">
+            <div class="bank-icon" style="background:linear-gradient(135deg,#1B5E20,#004D00)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><rect x="2" y="6" width="20" height="14" rx="3"/><path d="M2 10h20M6 14h2M10 14h4"/></svg>
+            </div>
+            <div class="bank-name"><span class="fa">صادرات</span><span class="en">Saderat</span></div>
+          </div>
+          <div class="bank-btn" data-bank="tejarat" onclick="App.toggleBank(this)">
+            <div class="bank-icon" style="background:linear-gradient(135deg,#E65100,#BF360C)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><rect x="2" y="6" width="20" height="14" rx="3"/><path d="M2 10h20M6 14h2M10 14h4"/></svg>
+            </div>
+            <div class="bank-name"><span class="fa">تجارت</span><span class="en">Tejarat</span></div>
+          </div>
+          <div class="bank-btn" data-bank="pasargad" onclick="App.toggleBank(this)">
+            <div class="bank-icon" style="background:linear-gradient(135deg,#4A148C,#311B92)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><rect x="2" y="6" width="20" height="14" rx="3"/><path d="M2 10h20M6 14h2M10 14h4"/></svg>
+            </div>
+            <div class="bank-name"><span class="fa">پاسارگاد</span><span class="en">Pasargad</span></div>
+          </div>
+          <div class="bank-btn" data-bank="parsian" onclick="App.toggleBank(this)">
+            <div class="bank-icon" style="background:linear-gradient(135deg,#006064,#004D40)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><rect x="2" y="6" width="20" height="14" rx="3"/><path d="M2 10h20M6 14h2M10 14h4"/></svg>
+            </div>
+            <div class="bank-name"><span class="fa">پارسیان</span><span class="en">Parsian</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: Assets (OPTIONAL) -->
+      <div class="ob-step" id="step-3">
+        <div class="step-num">
+          <span class="fa">مرحله ۳ از ۳ — اختیاری</span>
+          <span class="en">STEP 3 OF 3 — Optional</span>
+        </div>
+        <div class="step-title">
+          <span class="fa">دارایی‌های اولیه</span>
+          <span class="en">Initial Assets</span>
+        </div>
+        <div class="step-desc">
+          <span class="fa">می‌توانید الان اضافه کنید یا بعداً از بخش «دارایی» ویرایش کنید. قیمت ارز و کریپتو خودکار دریافت می‌شود.</span>
+          <span class="en">Add now or edit anytime from the Wealth tab. Crypto & forex prices are auto-fetched live.</span>
+        </div>
+        <div class="field">
+          <label class="field-label">
+            <span class="fa">موجودی تومانی</span>
+            <span class="en">IRR Cash Balance (Toman)</span>
+          </label>
+          <input class="field-input" id="ob-irt" type="number" inputmode="numeric" placeholder="0">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">USD $</label>
+            <input class="field-input" id="ob-usd" type="number" inputmode="decimal" step="any" placeholder="0">
+          </div>
+          <div class="field">
+            <label class="field-label">EUR €</label>
+            <input class="field-input" id="ob-eur" type="number" inputmode="decimal" step="any" placeholder="0">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">Bitcoin ₿</label>
+            <input class="field-input" id="ob-btc" type="number" inputmode="decimal" step="any" placeholder="0.000">
+          </div>
+          <div class="field">
+            <label class="field-label">Ethereum Ξ</label>
+            <input class="field-input" id="ob-eth" type="number" inputmode="decimal" step="any" placeholder="0.00">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">
+            <span class="fa">طلا / ملک / سایر (تومان)</span>
+            <span class="en">Gold / Real Estate / Other (Toman)</span>
+          </label>
+          <input class="field-input" id="ob-other" type="number" inputmode="numeric" placeholder="0">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ob-footer">
+    <button class="btn-back" id="ob-back" onclick="App.obBack()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="btn-primary" id="ob-next" onclick="App.obNext()">
+      <span class="fa">ادامه</span>
+      <span class="en">Continue</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ MAIN APP ══ -->
+<div class="screen" id="s-app">
+  <div class="pages">
+
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="greeting" id="greeting"></div>
+          <div class="username" id="username">NEXUS</div>
+        </div>
+        <div class="topbar-right">
+          <div class="icon-btn lang-btn" onclick="App.toggleLang()" id="lang-toggle-btn">EN</div>
+          <div class="icon-btn" onclick="App.openSettings()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </div>
+          <div class="icon-btn" onclick="App.showNotif()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <div class="notif-pip"></div>
+          </div>
+          <div class="avatar" id="avatar">N</div>
+        </div>
+      </div>
+
+      <!-- Balance Card -->
+      <div class="balance-card">
+        <div class="bc-shine"></div>
+        <div class="bc-grid"></div>
+        <div class="bc-glow"></div>
+        <div class="bc-tag">
+          <div class="live-dot"></div>
+          <span class="fa">موجودی کل دارایی‌ها</span>
+          <span class="en">Total Net Worth</span>
+        </div>
+        <div class="bc-amount" id="bc-amount">
+          0 <span class="bc-currency fa">تومان</span><span class="bc-currency en">IRR</span>
+        </div>
+        <div class="bc-change" id="bc-change">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          <span id="bc-change-txt">—</span>
+        </div>
+        <div class="bc-divider"></div>
+        <div class="bc-stats">
+          <div class="bc-stat">
+            <div class="bc-stat-label"><span class="fa">درآمد</span><span class="en">Income</span></div>
+            <div class="bc-stat-val" id="bc-inc" style="color:var(--mint)">—</div>
+          </div>
+          <div class="bc-stat">
+            <div class="bc-stat-label"><span class="fa">هزینه</span><span class="en">Expenses</span></div>
+            <div class="bc-stat-val" id="bc-exp" style="color:var(--rose)">—</div>
+          </div>
+          <div class="bc-stat">
+            <div class="bc-stat-label"><span class="fa">پس‌انداز</span><span class="en">Savings</span></div>
+            <div class="bc-stat-val" id="bc-sav" style="color:var(--gold)">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <div class="qa-item" onclick="App.toast(L('انتقال وجه','Transfer'))">
+          <div class="qa-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          <div class="qa-label"><span class="fa">انتقال</span><span class="en">Transfer</span></div>
+        </div>
+        <div class="qa-item" onclick="App.toast(L('پرداخت قبض','Bill Pay'))">
+          <div class="qa-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--mint)" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+          <div class="qa-label"><span class="fa">پرداخت</span><span class="en">Pay</span></div>
+        </div>
+        <div class="qa-item" onclick="App.toast(L('شارژ حساب','Top Up'))">
+          <div class="qa-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div class="qa-label"><span class="fa">شارژ</span><span class="en">Top Up</span></div>
+        </div>
+        <div class="qa-item" onclick="App.toast(L('برداشت','Withdraw'))">
+          <div class="qa-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+          <div class="qa-label"><span class="fa">برداشت</span><span class="en">Withdraw</span></div>
+        </div>
+        <div class="qa-item" onclick="App.toast(L('تاریخچه','History'))">
+          <div class="qa-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="qa-label"><span class="fa">تاریخچه</span><span class="en">History</span></div>
+        </div>
+      </div>
+
+      <!-- AI Insights -->
+      <div class="section-header">
+        <div class="section-title"><span class="fa">✦ هوش مالی</span><span class="en">✦ AI Insights</span></div>
+      </div>
+      <div class="insights-scroll" id="home-insights"></div>
+    </div>
+
+    <!-- ACCOUNTS -->
+    <div class="page" id="page-accounts">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="greeting"><span class="fa">مدیریت</span><span class="en">Management</span></div>
+          <div class="username"><span class="fa">حساب‌های بانکی</span><span class="en">Bank Accounts</span></div>
+        </div>
+        <div class="topbar-right"><div class="avatar" id="avatar2">N</div></div>
+      </div>
+      <div id="accounts-list"></div>
+    </div>
+
+    <!-- WEALTH -->
+    <div class="page" id="page-wealth">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="greeting"><span class="fa">سبد دارایی</span><span class="en">Portfolio</span></div>
+          <div class="username"><span class="fa">ثروت من</span><span class="en">My Wealth</span></div>
+        </div>
+        <div class="topbar-right">
+          <div class="live-badge"><div class="live-badge-dot"></div>LIVE</div>
+          <div class="avatar" id="avatar3">N</div>
+        </div>
+      </div>
+
+      <div class="wealth-hero">
+        <div class="wealth-label"><span class="fa">ارزش خالص کل</span><span class="en">Total Net Worth</span></div>
+        <div class="wealth-value" id="wealth-total">—</div>
+        <div class="wealth-sub" id="wealth-sub">—</div>
+      </div>
+
+      <div class="section-header" style="margin-bottom:8px">
+        <div class="section-title"><span class="fa">قیمت زنده</span><span class="en">Live Prices</span></div>
+        <div class="section-action" onclick="App.fetchPrices()"><span class="fa">↻ بروز</span><span class="en">↻ Refresh</span></div>
+      </div>
+      <div class="ticker-row" id="ticker-row">
+        <div class="ticker-card"><div class="ticker-loading"><span></span><span></span><span></span></div></div>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title"><span class="fa">دارایی‌های من</span><span class="en">My Assets</span></div>
+        <div class="section-action" onclick="App.openAssetModal()"><span class="fa">+ افزودن</span><span class="en">+ Add</span></div>
+      </div>
+      <div class="asset-grid" id="asset-grid"></div>
+      <button class="add-asset-btn" onclick="App.openAssetModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span class="fa">افزودن دارایی جدید</span>
+        <span class="en">Add New Asset</span>
+      </button>
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="page" id="page-insights">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="greeting"><span class="fa">تحلیل هوشمند</span><span class="en">Analytics</span></div>
+          <div class="username"><span class="fa">گزارش مالی</span><span class="en">Financial Report</span></div>
+        </div>
+        <div class="topbar-right"><div class="avatar" id="avatar4">N</div></div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label"><span class="fa">نرخ پس‌انداز</span><span class="en">Savings Rate</span></div>
+          <div class="kpi-value" id="kpi-sr" style="color:var(--mint)">—</div>
+          <div class="kpi-status" id="kpi-sr-s"></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label"><span class="fa">نسبت هزینه</span><span class="en">Expense Ratio</span></div>
+          <div class="kpi-value" id="kpi-er" style="color:var(--rose)">—</div>
+          <div class="kpi-status" id="kpi-er-s"></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label"><span class="fa">نسبت DTI</span><span class="en">Debt-to-Income</span></div>
+          <div class="kpi-value" style="color:var(--gold)">0%</div>
+          <div class="kpi-status" style="color:var(--mint)"><span class="fa">✓ ایده‌آل</span><span class="en">✓ Ideal</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label"><span class="fa">سلامت مالی</span><span class="en">Health Score</span></div>
+          <div class="kpi-value" id="kpi-hs" style="color:var(--violet)">—</div>
+          <div class="kpi-status" id="kpi-hs-s"></div>
+        </div>
+      </div>
+
+      <!-- Bar Chart -->
+      <div class="chart-card">
+        <div class="chart-title"><span class="fa">درآمد، هزینه و پس‌انداز — ۶ ماه</span><span class="en">Income, Expenses & Savings — 6 Months</span></div>
+        <div class="bar-chart-wrap"><div class="bar-chart" id="bar-chart"></div></div>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div><span class="fa">درآمد</span><span class="en">Income</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--rose)"></div><span class="fa">هزینه</span><span class="en">Expenses</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--mint)"></div><span class="fa">پس‌انداز</span><span class="en">Savings</span></div>
+        </div>
+      </div>
+
+      <!-- Donut + Table -->
+      <div class="chart-card">
+        <div class="chart-title"><span class="fa">توزیع هزینه‌ها</span><span class="en">Expense Breakdown</span></div>
+        <div class="donut-area">
+          <svg class="donut-svg" width="108" height="108" viewBox="0 0 108 108">
+            <circle cx="54" cy="54" r="40" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="12"/>
+            <circle class="donut-circle" id="dc1" cx="54" cy="54" r="40" fill="none" stroke-width="12" stroke-dasharray="0 251" transform="rotate(-90 54 54)"/>
+            <circle class="donut-circle" id="dc2" cx="54" cy="54" r="40" fill="none" stroke-width="12" stroke-dasharray="0 251" transform="rotate(-90 54 54)"/>
+            <circle class="donut-circle" id="dc3" cx="54" cy="54" r="40" fill="none" stroke-width="12" stroke-dasharray="0 251" transform="rotate(-90 54 54)"/>
+            <circle class="donut-circle" id="dc4" cx="54" cy="54" r="40" fill="none" stroke-width="12" stroke-dasharray="0 251" transform="rotate(-90 54 54)"/>
+            <circle class="donut-circle" id="dc5" cx="54" cy="54" r="40" fill="none" stroke-width="12" stroke-dasharray="0 251" transform="rotate(-90 54 54)"/>
+          </svg>
+          <div class="donut-legend" id="donut-legend"></div>
+        </div>
+        <table class="exp-table">
+          <thead><tr>
+            <th><span class="fa">دسته</span><span class="en">Category</span></th>
+            <th><span class="fa">سهم</span><span class="en">Share</span></th>
+            <th><span class="fa">مبلغ</span><span class="en">Amount</span></th>
+          </tr></thead>
+          <tbody id="exp-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- Trend -->
+      <div class="chart-card">
+        <div class="chart-title"><span class="fa">روند ارزش خالص</span><span class="en">Net Worth Trend</span></div>
+        <div class="trend-wrap"><svg class="trend-svg" id="trend-svg" viewBox="0 0 300 80" preserveAspectRatio="none"></svg></div>
+        <div class="trend-labels" id="trend-labels"></div>
+      </div>
+    </div>
+
+    <!-- MARKET -->
+    <div class="page" id="page-market">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="greeting"><span class="fa">بازار هوشمند</span><span class="en">Smart Market</span></div>
+          <div class="username"><span class="fa">پیشنهادهای AI</span><span class="en">AI Recommendations</span></div>
+        </div>
+        <div class="topbar-right"><div class="avatar" id="avatar5">N</div></div>
+      </div>
+
+      <div class="ai-analysis-card">
+        <div class="ai-badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <span class="fa">تحلیل عمیق هوش مصنوعی</span><span class="en">AI Deep Analysis</span>
+        </div>
+        <div class="ai-ratios" id="ai-ratios"></div>
+        <div id="ai-recs"></div>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title"><span class="fa">فرصت‌های سرمایه‌گذاری</span><span class="en">Investment Opportunities</span></div>
+      </div>
+      <div id="products-list"></div>
+    </div>
+
+  </div><!-- /pages -->
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <div class="nav-item active" onclick="App.nav('home',this)">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="fa">خانه</span><span class="en">Home</span>
+      <div class="nav-pip"></div>
+    </div>
+    <div class="nav-item" onclick="App.nav('accounts',this)">
+      <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20M6 14h2M10 14h4"/></svg>
+      <span class="fa">حساب‌ها</span><span class="en">Accounts</span>
+      <div class="nav-pip"></div>
+    </div>
+    <div class="nav-item" onclick="App.nav('wealth',this)">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span class="fa">دارایی</span><span class="en">Wealth</span>
+      <div class="nav-pip"></div>
+    </div>
+    <div class="nav-item" onclick="App.nav('insights',this)">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span class="fa">تحلیل</span><span class="en">Insights</span>
+      <div class="nav-pip"></div>
+    </div>
+    <div class="nav-item" onclick="App.nav('market',this)">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span class="fa">بازار</span><span class="en">Market</span>
+      <div class="nav-pip"></div>
+    </div>
+  </nav>
+</div><!-- /s-app -->
+
+<!-- ══ ADD ASSET MODAL ══ -->
+<div class="modal-overlay" id="asset-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><span class="fa">افزودن دارایی</span><span class="en">Add Asset</span></div>
+    <div class="asset-chips" id="asset-chips">
+      <div class="asset-chip sel" data-type="re" onclick="App.selectAssetType(this)"><div class="chip-icon">🏠</div><div class="chip-label"><span class="fa">ملک</span><span class="en">Property</span></div></div>
+      <div class="asset-chip" data-type="ve" onclick="App.selectAssetType(this)"><div class="chip-icon">🚗</div><div class="chip-label"><span class="fa">خودرو</span><span class="en">Vehicle</span></div></div>
+      <div class="asset-chip" data-type="gj" onclick="App.selectAssetType(this)"><div class="chip-icon">💎</div><div class="chip-label"><span class="fa">طلا</span><span class="en">Gold</span></div></div>
+      <div class="asset-chip" data-type="cr" onclick="App.selectAssetType(this)"><div class="chip-icon">₿</div><div class="chip-label"><span class="fa">کریپتو</span><span class="en">Crypto</span></div></div>
+      <div class="asset-chip" data-type="fx" onclick="App.selectAssetType(this)"><div class="chip-icon">💵</div><div class="chip-label"><span class="fa">ارز</span><span class="en">Forex</span></div></div>
+      <div class="asset-chip" data-type="st" onclick="App.selectAssetType(this)"><div class="chip-icon">📈</div><div class="chip-label"><span class="fa">سهام</span><span class="en">Stocks</span></div></div>
+      <div class="asset-chip" data-type="dp" onclick="App.selectAssetType(this)"><div class="chip-icon">🏦</div><div class="chip-label"><span class="fa">سپرده</span><span class="en">Deposit</span></div></div>
+      <div class="asset-chip" data-type="ca" onclick="App.selectAssetType(this)"><div class="chip-icon">💰</div><div class="chip-label"><span class="fa">نقد</span><span class="en">Cash</span></div></div>
+    </div>
+    <!-- Crypto fields -->
+    <div class="dynamic-fields" id="fields-cr">
+      <div class="field-row">
+        <div class="field"><label class="field-label">BTC ₿</label><input class="field-input" id="m-btc" type="number" inputmode="decimal" step="any" placeholder="0.000"></div>
+        <div class="field"><label class="field-label">ETH Ξ</label><input class="field-input" id="m-eth" type="number" inputmode="decimal" step="any" placeholder="0.00"></div>
+      </div>
+    </div>
+    <!-- Forex fields -->
+    <div class="dynamic-fields" id="fields-fx">
+      <div class="field-row">
+        <div class="field"><label class="field-label">USD $</label><input class="field-input" id="m-usd" type="number" inputmode="decimal" step="any" placeholder="0"></div>
+        <div class="field"><label class="field-label">EUR €</label><input class="field-input" id="m-eur" type="number" inputmode="decimal" step="any" placeholder="0"></div>
+      </div>
+    </div>
+    <!-- Fiat fields -->
+    <div class="dynamic-fields show" id="fields-fiat">
+      <div class="field">
+        <label class="field-label"><span class="fa">ارزش (تومان)</span><span class="en">Value (Toman)</span></label>
+        <input class="field-input" id="m-val" type="number" inputmode="numeric" placeholder="0">
+      </div>
+      <div class="field">
+        <label class="field-label"><span class="fa">توضیح (اختیاری)</span><span class="en">Description (optional)</span></label>
+        <input class="field-input" id="m-desc" type="text">
+      </div>
+    </div>
+    <button class="btn-primary" onclick="App.saveAsset()" style="width:100%;margin-top:6px">
+      <span class="fa">ذخیره دارایی</span><span class="en">Save Asset</span>
+    </button>
+    <button onclick="App.closeAssetModal()" style="width:100%;padding:13px;color:var(--t2);font-size:14px;margin-top:8px">
+      <span class="fa">انصراف</span><span class="en">Cancel</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ SETTINGS PANEL ══ -->
+<div class="settings-overlay" id="settings-overlay">
+  <div class="settings-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><span class="fa">تنظیمات</span><span class="en">Settings</span></div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-label"><span class="fa">زبان</span><span class="en">Language</span></div>
+        <div class="settings-sublabel"><span class="fa">فارسی / English</span><span class="en">Persian / English</span></div>
+      </div>
+      <div class="settings-action" onclick="App.toggleLang();App.closeSettings()">
+        <span class="fa">English</span><span class="en">فارسی</span>
+      </div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-label"><span class="fa">ویرایش پروفایل</span><span class="en">Edit Profile</span></div>
+        <div class="settings-sublabel"><span class="fa">نام، درآمد، هزینه</span><span class="en">Name, income, expenses</span></div>
+      </div>
+      <div class="settings-action" onclick="App.editProfile()"><span class="fa">ویرایش</span><span class="en">Edit</span></div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-label"><span class="fa">مدیریت دارایی‌ها</span><span class="en">Manage Assets</span></div>
+        <div class="settings-sublabel"><span class="fa">افزودن یا حذف دارایی</span><span class="en">Add or remove assets</span></div>
+      </div>
+      <div class="settings-action" onclick="App.nav('wealth');App.closeSettings()"><span class="fa">مشاهده</span><span class="en">View</span></div>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-label"><span class="fa">درباره NEXUS</span><span class="en">About NEXUS</span></div>
+        <div class="settings-sublabel">v1.0.0 — AI Financial Platform</div>
+      </div>
+    </div>
+    <div class="settings-row">
+      <div><div class="settings-label settings-danger"><span class="fa">پاک کردن داده‌ها</span><span class="en">Clear All Data</span></div></div>
+      <div class="settings-action settings-danger" onclick="App.clearData()"><span class="fa">پاک کن</span><span class="en">Clear</span></div>
+    </div>
+    <button onclick="App.closeSettings()" style="width:100%;padding:14px;margin-top:8px;border-radius:14px;background:var(--bg3);color:var(--t1);font-size:14px;font-weight:600;font-family:inherit;">
+      <span class="fa">بستن</span><span class="en">Close</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ EDIT PROFILE MODAL ══ -->
+<div class="modal-overlay" id="profile-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><span class="fa">ویرایش پروفایل</span><span class="en">Edit Profile</span></div>
+    <div class="field">
+      <label class="field-label"><span class="fa">نام</span><span class="en">Name</span></label>
+      <input class="field-input" id="p-name" type="text">
+    </div>
+    <div class="field">
+      <label class="field-label"><span class="fa">درآمد ماهانه (تومان)</span><span class="en">Monthly Income (Toman)</span></label>
+      <input class="field-input" id="p-income" type="number" inputmode="numeric">
+    </div>
+    <div class="field">
+      <label class="field-label"><span class="fa">هزینه ماهانه (تومان)</span><span class="en">Monthly Expenses (Toman)</span></label>
+      <input class="field-input" id="p-expense" type="number" inputmode="numeric">
+    </div>
+    <button class="btn-primary" onclick="App.saveProfile()" style="width:100%;margin-top:6px">
+      <span class="fa">ذخیره</span><span class="en">Save</span>
+    </button>
+    <button onclick="App.closeProfileModal()" style="width:100%;padding:13px;color:var(--t2);font-size:14px;margin-top:8px;font-family:inherit;">
+      <span class="fa">انصراف</span><span class="en">Cancel</span>
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════
+   NEXUS — Production App Logic
+   State → Compute → Render. Clean unidirectional flow.
+══════════════════════════════════════════════════════ */
+
+// ── State ──
+let S = {
+  lang: 'fa',
+  user: { name: '', income: 0, expense: 0 },
+  assets: [],
+  prices: { btc: 65000, eth: 3200, usd: 62000, eur: 68000, loaded: false },
+  banks: [],
+  obStep: 1,
+  selAssetType: 're',
+};
+
+// ── Persistence ──
+const DB = {
+  save() {
+    localStorage.setItem('nx3_state', JSON.stringify({
+      lang: S.lang, user: S.user, assets: S.assets, banks: S.banks
+    }));
+  },
+  load() {
+    try {
+      const d = JSON.parse(localStorage.getItem('nx3_state') || 'null');
+      if (d) { S.lang = d.lang||'fa'; S.user = d.user||{}; S.assets = d.assets||[]; S.banks = d.banks||[]; return true; }
+    } catch(e) {}
+    return false;
+  }
+};
+
+// ── i18n helper ──
+function L(fa, en) { return S.lang === 'fa' ? fa : en; }
+
+// ── Format helpers ──
+function fmt(n) {
+  n = Math.round(n);
+  if (n >= 1e12) return (n/1e12).toFixed(1) + (S.lang==='fa'?'T':'T');
+  if (n >= 1e9)  return (n/1e9).toFixed(1)  + (S.lang==='fa'?'B':'B');
+  if (n >= 1e6)  return (n/1e6).toFixed(1)  + (S.lang==='fa'?'M':'M');
+  return n.toLocaleString();
+}
+function fmtFull(n) { return Math.round(n).toLocaleString(); }
+function fmtPct(n) { return Math.round(n) + '%'; }
+
+// ── Asset value in Toman ──
+function assetToman(a) {
+  if (a.sym === 'btc') return a.qty * S.prices.btc * S.prices.usd * 10;
+  if (a.sym === 'eth') return a.qty * S.prices.eth * S.prices.usd * 10;
+  if (a.sym === 'usd') return a.qty * S.prices.usd * 10;
+  if (a.sym === 'eur') return a.qty * S.prices.eur * 10;
+  return a.val || 0;
+}
+function totalWealth() { return S.assets.reduce((s,a) => s + assetToman(a), 0); }
+
+// ── Financial Score ──
+function calcScore() {
+  const inc = S.user.income || 1;
+  const exp = S.user.expense || 0;
+  const sr = Math.max(0, (inc - exp) / inc);
+  const w = totalWealth();
+  const months = w / Math.max(exp, 1);
+  const div = Math.min(1, S.assets.length / 4);
+  let score = (sr * 40) + Math.min(30, months * 2) + (div * 15) + (inc > 30e6 ? 15 : 10);
+  return Math.max(0, Math.min(100, Math.round(score)));
+}
+
+// ── Expense categories ──
+function expCats() {
+  const fa = [
+    { key:'housing', name:'مسکن و اجاره',       color:'#E8B84B', pct:.30 },
+    { key:'food',    name:'خوراک',               color:'#0DD9A0', pct:.25 },
+    { key:'trans',   name:'حمل‌ونقل',            color:'#3B82F6', pct:.12 },
+    { key:'bills',   name:'قبوض',                color:'#A78BFA', pct:.10 },
+    { key:'health',  name:'سلامت',               color:'#F59E0B', pct:.08 },
+    { key:'other',   name:'سایر',                color:'#F43F5E', pct:.15 },
+  ];
+  const en = [
+    { key:'housing', name:'Housing',             color:'#E8B84B', pct:.30 },
+    { key:'food',    name:'Food',                color:'#0DD9A0', pct:.25 },
+    { key:'trans',   name:'Transport',           color:'#3B82F6', pct:.12 },
+    { key:'bills',   name:'Utilities',           color:'#A78BFA', pct:.10 },
+    { key:'health',  name:'Health',              color:'#F59E0B', pct:.08 },
+    { key:'other',   name:'Other',               color:'#F43F5E', pct:.15 },
+  ];
+  return S.lang === 'fa' ? fa : en;
+}
+
+// ── Month data ──
+const MONTHS_FA = ['فرو','ارد','خرد','تیر','مرد','شهر'];
+const MONTHS_EN = ['Jan','Feb','Mar','Apr','May','Jun'];
+const MULTS = [
+  {i:.98,e:1.06},{i:1.01,e:.97},{i:1.03,e:1.01},
+  {i:.96,e:1.09},{i:1.06,e:.94},{i:1.00,e:1.00}
+];
+
+// ──────────────────────────────────────────
+// App Controller
+// ──────────────────────────────────────────
+const App = {
+
+  // ── Screen management ──
+  showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => {
+      s.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+  },
+
+  // ── Language ──
+  setLang(l) {
+    S.lang = l;
+    document.body.className = 'lang-' + l;
+    document.documentElement.lang = l;
+    document.documentElement.dir = l === 'fa' ? 'rtl' : 'ltr';
+    document.getElementById('lang-toggle-btn').textContent = l === 'fa' ? 'EN' : 'فا';
+    DB.save();
+    this.showScreen('s-onboard');
+  },
+
+  toggleLang() {
+    const nl = S.lang === 'fa' ? 'en' : 'fa';
+    S.lang = nl;
+    document.body.className = 'lang-' + nl;
+    document.documentElement.lang = nl;
+    document.documentElement.dir = nl === 'fa' ? 'rtl' : 'ltr';
+    document.getElementById('lang-toggle-btn').textContent = nl === 'fa' ? 'EN' : 'فا';
+    DB.save();
+    this.renderAll();
+    this.toast(nl === 'fa' ? 'زبان فارسی ✓' : 'English Mode ✓');
+  },
+
+  // ── Onboarding ──
+  obNext() {
+    if (S.obStep === 1) {
+      const name = document.getElementById('f-name').value.trim();
+      const income = parseFloat(document.getElementById('f-income').value) || 0;
+      const expense = parseFloat(document.getElementById('f-expense').value) || 0;
+      if (!name) { this.toast(L('نام خود را وارد کنید','Please enter your name')); return; }
+      S.user = { name, income, expense };
+      this.goStep(2);
+    } else if (S.obStep === 2) {
+      this.goStep(3);
+    } else {
+      // Collect optional initial assets
+      const irt   = parseFloat(document.getElementById('ob-irt').value) || 0;
+      const usd   = parseFloat(document.getElementById('ob-usd').value) || 0;
+      const eur   = parseFloat(document.getElementById('ob-eur').value) || 0;
+      const btc   = parseFloat(document.getElementById('ob-btc').value) || 0;
+      const eth   = parseFloat(document.getElementById('ob-eth').value) || 0;
+      const other = parseFloat(document.getElementById('ob-other').value) || 0;
+      const now = Date.now();
+      if (irt   > 0) S.assets.push({ id: now+1, ico:'💵', type:'ca', name: L('نقد تومانی','IRR Cash'),  val: irt,   qty: 0, sym: '' });
+      if (usd   > 0) S.assets.push({ id: now+2, ico:'💵', type:'fx', name: 'USD',                       val: 0,     qty: usd, sym: 'usd' });
+      if (eur   > 0) S.assets.push({ id: now+3, ico:'💶', type:'fx', name: 'EUR',                       val: 0,     qty: eur, sym: 'eur' });
+      if (btc   > 0) S.assets.push({ id: now+4, ico:'₿',  type:'cr', name: 'Bitcoin',                   val: 0,     qty: btc, sym: 'btc' });
+      if (eth   > 0) S.assets.push({ id: now+5, ico:'Ξ',  type:'cr', name: 'Ethereum',                  val: 0,     qty: eth, sym: 'eth' });
+      if (other > 0) S.assets.push({ id: now+6, ico:'💎', type:'gj', name: L('طلا/سایر','Gold/Other'), val: other, qty: 0, sym: '' });
+      this.launch();
+    }
+  },
+
+  obBack() {
+    if (S.obStep > 1) this.goStep(S.obStep - 1);
+  },
+
+  goStep(n) {
+    document.getElementById('step-' + S.obStep).classList.remove('active');
+    document.getElementById('dot-' + S.obStep).className = 'step-dot done';
+    S.obStep = n;
+    document.getElementById('step-' + n).classList.add('active');
+    document.getElementById('dot-' + n).className = 'step-dot active';
+    const back = document.getElementById('ob-back');
+    back.classList.toggle('show', n > 1);
+    const nextBtn = document.getElementById('ob-next');
+    if (n === 3) {
+      nextBtn.innerHTML = '<span class="fa">شروع NEXUS ✦</span><span class="en">Launch NEXUS ✦</span>';
+    } else {
+      nextBtn.innerHTML = '<span class="fa">ادامه</span><span class="en">Continue</span>';
+    }
+    document.body.className = 'lang-' + S.lang;
+  },
+
+  toggleBank(el) { el.classList.toggle('sel'); },
+
+  // ── Launch ──
+  launch() {
+    DB.save();
+    this.showScreen('s-app');
+    this.updateAvatars();
+    document.getElementById('lang-toggle-btn').textContent = S.lang === 'fa' ? 'EN' : 'فا';
+    this.renderAll();
+    this.fetchPrices();
+  },
+
+  updateAvatars() {
+    const av = (S.user.name || 'N').charAt(0).toUpperCase();
+    ['avatar','avatar2','avatar3','avatar4','avatar5'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = av;
+    });
+    const un = document.getElementById('username');
+    if (un) un.textContent = S.user.name || 'NEXUS';
+    const gr = document.getElementById('greeting');
+    if (gr) {
+      const h = new Date().getHours();
+      if (S.lang === 'fa') {
+        gr.textContent = h < 12 ? 'صبح بخیر 👋' : h < 17 ? 'ظهر بخیر 👋' : 'شب بخیر 👋';
+      } else {
+        gr.textContent = h < 12 ? 'Good morning 👋' : h < 17 ? 'Good afternoon 👋' : 'Good evening 👋';
+      }
+    }
+  },
+
+  // ── Navigation ──
+  nav(page, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    if (el) el.classList.add('active');
+    // Lazy render on tab switch
+    if (page === 'wealth')   { this.renderWealth(); }
+    if (page === 'accounts') { this.renderAccounts(); }
+    if (page === 'insights') { this.renderInsights(); }
+    if (page === 'market')   { this.renderMarket(); }
+  },
+
+  // ── Live Prices ──
+  async fetchPrices() {
+    try {
+      const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd', { signal: AbortSignal.timeout(7000) });
+      const d = await r.json();
+      if (d.bitcoin)  S.prices.btc = d.bitcoin.usd;
+      if (d.ethereum) S.prices.eth = d.ethereum.usd;
+      S.prices.loaded = true;
+    } catch(e) { /* use defaults */ }
+    S.prices.usd = 62000; S.prices.eur = 68000;
+    this.renderTicker();
+    this.renderHomeBalance();
+    this.renderWealth();
+  },
+
+  renderTicker() {
+    const items = [
+      { n:'BTC', p:'$'+S.prices.btc.toLocaleString(), c:'+2.4%', up:true },
+      { n:'ETH', p:'$'+S.prices.eth.toLocaleString(), c:'+1.8%', up:true },
+      { n:'USD/T', p:(S.prices.usd*10).toLocaleString()+'﷼', c:'+0.3%', up:true },
+      { n:'EUR/T', p:(S.prices.eur*10).toLocaleString()+'﷼', c:'+0.5%', up:true },
+      { n:'XAU/g', p:'620,000﷼', c:'-0.1%', up:false },
+    ];
+    document.getElementById('ticker-row').innerHTML = items.map(t => `
+      <div class="ticker-card">
+        <div class="ticker-name">${t.n}</div>
+        <div class="ticker-price">${t.p}</div>
+        <div class="ticker-change ${t.up?'up':'dn'}">${t.c}</div>
+      </div>`).join('');
+  },
+
+  // ── Render: Home Balance ──
+  renderHomeBalance() {
+    const w = totalWealth();
+    const inc = S.user.income || 0;
+    const exp = S.user.expense || 0;
+    const sav = Math.max(0, inc - exp);
+    const sr = inc > 0 ? Math.round(((inc-exp)/inc)*100) : 0;
+
+    document.getElementById('bc-amount').innerHTML =
+      fmt(w) + ` <span class="bc-currency fa">تومان</span><span class="bc-currency en">IRR</span>`;
+    document.getElementById('bc-change-txt').textContent =
+      `${sr}% ${L('نرخ پس‌انداز','savings rate')}`;
+    document.getElementById('bc-inc').textContent = fmt(inc);
+    document.getElementById('bc-exp').textContent = fmt(exp);
+    document.getElementById('bc-sav').textContent = fmt(sav);
+  },
+
+  // ── Render: AI Insights (Home) ──
+  renderInsights() {
+    const inc = S.user.income || 1;
+    const exp = S.user.expense || 0;
+    const sav = Math.max(0, inc - exp);
+    const sr = Math.round(((inc-exp)/Math.max(inc,1))*100);
+    const w = totalWealth();
+    const mo = w > 0 && exp > 0 ? Math.round(w/exp) : 0;
+    const sc = calcScore();
+
+    const cards = [
+      {
+        cls: 'info',
+        ico: '📊',
+        badge: 'DTI',
+        badge_c: 'var(--blue)', badge_bg: 'var(--blueA)',
+        title: L('ظرفیت وام شما بالاست', 'Your borrowing capacity is strong'),
+        body: L(
+          `DTI شما ۰٪ — زیر ۳۵٪ استاندارد. ظرفیت قسط: ${fmt(inc*.35)} تومان/ماه.`,
+          `Your DTI is 0% — below 35% threshold. Installment capacity: ${fmt(inc*.35)} T/month.`
+        )
+      },
+      sr < 20 ? {
+        cls: 'warn', ico:'⚠️',
+        badge: L('هشدار','Warning'),
+        badge_c:'var(--rose)', badge_bg:'var(--roseA)',
+        title: L(`نرخ پس‌انداز ${sr}٪ پایین است`, `Savings rate ${sr}% is low`),
+        body: L(
+          `با کاهش ۱۵٪ هزینه، پس‌انداز تا ${fmt(sav + exp*.15)} تومان/ماه می‌رسد.`,
+          `Cutting expenses 15% raises monthly savings to ${fmt(sav + exp*.15)} Toman.`
+        )
+      } : {
+        cls: 'ok', ico:'✅',
+        badge: L('عالی','Excellent'),
+        badge_c:'var(--mint)', badge_bg:'var(--mintA)',
+        title: L(`پس‌انداز ${sr}٪ — عالی!`, `${sr}% savings rate — great!`),
+        body: L(
+          `ماهانه ${fmt(sav)} تومان پس‌انداز می‌کنید. سرمایه‌گذاری ۵۰٪ توصیه می‌شود.`,
+          `You save ${fmt(sav)} Toman monthly. Investing 50% of it is recommended.`
+        )
+      },
+      {
+        cls: mo >= 6 ? 'ok' : 'tip', ico:'🛡️',
+        badge: L('صندوق اضطراری','Emergency Fund'),
+        badge_c:'var(--gold)', badge_bg:'var(--goldAA)',
+        title: L(`${mo} ماه پوشش اضطراری`, `${mo}-month emergency coverage`),
+        body: mo >= 6
+          ? L('✓ وضعیت مطلوب است.', '✓ You are well covered.')
+          : L(`برای ۶ ماه نیاز به ${fmt((6-mo)*exp)} تومان بیشتر دارید.`,
+              `Need ${fmt((6-mo)*exp)} T more to reach 6 months.`)
+      },
+      {
+        cls: 'tip', ico:'💡',
+        badge: L('قانون ۵۰-۳۰-۲۰','50-30-20 Rule'),
+        badge_c:'var(--amber)', badge_bg:'var(--amberA)',
+        title: L('بودجه‌بندی هوشمند', 'Smart Budgeting'),
+        body: L(
+          `از ${fmt(inc)}T درآمد: ضروریات ${fmt(inc*.5)} · خواسته‌ها ${fmt(inc*.3)} · پس‌انداز ${fmt(inc*.2)}`,
+          `From ${fmt(inc)}T: Needs ${fmt(inc*.5)} · Wants ${fmt(inc*.3)} · Save ${fmt(inc*.2)}`
+        )
+      },
+      {
+        cls: sc >= 70 ? 'ok' : sc >= 50 ? 'tip' : 'warn', ico:'🏆',
+        badge: L('امتیاز مالی','Health Score'),
+        badge_c:'var(--violet)', badge_bg:'var(--violetA)',
+        title: L(`سلامت مالی: ${sc}/100`, `Financial Health: ${sc}/100`),
+        body: sc >= 70
+          ? L('✓ وضعیت عالی. تنوع سرمایه‌گذاری را حفظ کنید.', '✓ Excellent. Keep diversifying your portfolio.')
+          : sc >= 50
+          ? L('وضعیت خوب، قابل بهبود. هدف: بالای ۷۰.', 'Good standing. Target: above 70.')
+          : L('نیاز به توجه. افزایش پس‌انداز اولویت اصلی است.', 'Needs attention. Boosting savings is priority.')
+      }
+    ];
+
+    document.getElementById('home-insights').innerHTML = cards.map(c => `
+      <div class="insight-card ${c.cls}">
+        <div class="ins-icon">${c.ico}</div>
+        <div class="ins-badge" style="color:${c.badge_c};background:${c.badge_bg}">${c.badge}</div>
+        <div class="ins-title">${c.title}</div>
+        <div class="ins-body">${c.body}</div>
+      </div>`).join('');
+  },
+
+  // ── Render: Accounts ──
+  renderAccounts() {
+    const selBanks = [...document.querySelectorAll('.bank-btn.sel')];
+    const bankDefs = [
+      { key:'mellat',   name:L('بانک ملت','Mellat Bank'),   color:'#1565C0', color2:'#0D47A1' },
+      { key:'melli',    name:L('بانک ملی','Melli Bank'),    color:'#B71C1C', color2:'#7F0000' },
+      { key:'saderat',  name:L('بانک صادرات','Saderat'),    color:'#1B5E20', color2:'#004D00' },
+      { key:'tejarat',  name:L('بانک تجارت','Tejarat'),     color:'#E65100', color2:'#BF360C' },
+      { key:'pasargad', name:L('پاسارگاد','Pasargad'),      color:'#4A148C', color2:'#311B92' },
+      { key:'parsian',  name:L('پارسیان','Parsian'),        color:'#006064', color2:'#004D40' },
+    ];
+    const chosen = selBanks.length > 0
+      ? bankDefs.filter(b => selBanks.some(el => el.dataset.bank === b.key))
+      : bankDefs.slice(0,2);
+
+    const txFa = [
+      ['🛒','خرید آنلاین','-580K','2d'],['💸','انتقال وجه','+2.1M','5d'],['🏪','سوپرمارکت','-320K','7d']
+    ];
+    const txEn = [
+      ['🛒','Online Purchase','-580K','2d'],['💸','Transfer','+2.1M','5d'],['🏪','Supermarket','-320K','7d']
+    ];
+    const txns = S.lang === 'fa' ? txFa : txEn;
+
+    document.getElementById('accounts-list').innerHTML = chosen.map((b,i) => {
+      const bal = Math.round((S.user.income||25e6) * (0.9 + i*0.4));
+      return `
+      <div class="account-card">
+        <div class="acc-header">
+          <div class="acc-logo" style="background:linear-gradient(135deg,${b.color},${b.color2})">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><rect x="2" y="6" width="20" height="14" rx="3"/><path d="M2 10h20M6 14h2M10 14h4"/></svg>
+          </div>
+          <div class="acc-info">
+            <div class="acc-name">${b.name}</div>
+            <div class="acc-number">6037-**** ****-${1000+i*1111}</div>
+          </div>
+          <div class="acc-balance">${fmt(bal)}</div>
+        </div>
+        <div class="acc-txns">
+          ${txns.map(([ic,desc,amt,dt]) => `
+          <div class="txn-row">
+            <div class="txn-left">
+              <div class="txn-icon">${ic}</div>
+              <div><div class="txn-desc">${desc}</div><div class="txn-date">${dt}</div></div>
+            </div>
+            <div class="txn-amount ${amt.startsWith('+')?'pos':'neg'}">${amt}</div>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    }).join('');
+  },
+
+  // ── Render: Wealth ──
+  renderWealth() {
+    const w = totalWealth();
+    document.getElementById('wealth-total').textContent = fmt(w);
+    document.getElementById('wealth-sub').textContent =
+      L(`${S.assets.length} دارایی ثبت‌شده`, `${S.assets.length} assets tracked`);
+    this.renderAssetGrid();
+    this.renderTicker();
+  },
+
+  renderAssetGrid() {
+    const colors = ['var(--gold)','var(--mint)','var(--blue)','var(--violet)','var(--amber)','var(--rose)'];
+    const bgs    = ['var(--goldAA)','var(--mintA)','var(--blueA)','var(--violetA)','var(--amberA)','var(--roseA)'];
+
+    const grid = document.getElementById('asset-grid');
+    if (S.assets.length === 0) {
+      grid.innerHTML = `<div style="grid-column:span 2;padding:20px;text-align:center;color:var(--t2);font-size:13px">
+        <span class="fa">هنوز دارایی اضافه نشده</span><span class="en">No assets added yet</span>
+      </div>`;
+      return;
+    }
+    grid.innerHTML = S.assets.map((a,i) => {
+      const v = assetToman(a);
+      const c = colors[i % colors.length];
+      const bg = bgs[i % bgs.length];
+      const sub = a.qty > 0 ? `${a.qty} ${a.sym.toUpperCase()}` : '';
+      return `
+      <div class="asset-card">
+        <div class="asset-del" onclick="App.deleteAsset(${a.id})">✕</div>
+        <div class="asset-ico-wrap" style="background:${bg}">
+          <span style="font-size:20px">${a.ico}</span>
+        </div>
+        <div class="asset-type-label">${a.name}</div>
+        <div class="asset-value" style="color:${c}">${fmt(v)}</div>
+        ${sub ? `<div class="asset-qty">${sub}</div>` : ''}
+      </div>`;
+    }).join('');
+  },
+
+  deleteAsset(id) {
+    S.assets = S.assets.filter(a => a.id !== id);
+    DB.save();
+    this.renderWealth();
+    this.renderHomeBalance();
+    this.toast(L('دارایی حذف شد','Asset removed'));
+  },
+
+  // ── Render: Insights Charts ──
+  renderInsights() {
+    const inc = S.user.income || 25e6;
+    const exp = S.user.expense || 15e6;
+    const sav = Math.max(0, inc - exp);
+    const sr  = inc > 0 ? Math.round(((inc-exp)/inc)*100) : 0;
+    const er  = inc > 0 ? Math.round((exp/inc)*100) : 0;
+    const sc  = calcScore();
+
+    // KPIs
+    document.getElementById('kpi-sr').textContent   = fmtPct(sr);
+    document.getElementById('kpi-er').textContent   = fmtPct(er);
+    document.getElementById('kpi-hs').textContent   = sc + '/100';
+    const srS = document.getElementById('kpi-sr-s');
+    srS.textContent = sr >= 30 ? L('✓ عالی','✓ Excellent') : sr >= 20 ? L('قابل قبول','Acceptable') : L('⚠ پایین','⚠ Low');
+    srS.style.color = sr >= 30 ? 'var(--mint)' : sr >= 20 ? 'var(--amber)' : 'var(--rose)';
+    const erS = document.getElementById('kpi-er-s');
+    erS.textContent = er <= 60 ? L('✓ متعادل','✓ Balanced') : er <= 80 ? L('بالا','High') : L('⚠ بحرانی','⚠ Critical');
+    erS.style.color = er <= 60 ? 'var(--mint)' : er <= 80 ? 'var(--amber)' : 'var(--rose)';
+    const hsS = document.getElementById('kpi-hs-s');
+    hsS.textContent = sc >= 70 ? L('✓ عالی','✓ Excellent') : sc >= 50 ? L('متوسط','Average') : L('⚠ نیاز به توجه','⚠ Needs attention');
+    hsS.style.color = sc >= 70 ? 'var(--mint)' : sc >= 50 ? 'var(--amber)' : 'var(--rose)';
+
+    // Bar Chart
+    const months = S.lang === 'fa' ? MONTHS_FA : MONTHS_EN;
+    const rows = MULTS.map(m => ({
+      inc: Math.round(inc * m.i), exp: Math.round(exp * m.e),
+      sav: Math.max(0, Math.round(inc*m.i - exp*m.e))
+    }));
+    const maxV = Math.max(...rows.map(r => r.inc));
+    const H = 86;
+    document.getElementById('bar-chart').innerHTML = rows.map((r, i) => {
+      const ih = Math.max(4, Math.round((r.inc/maxV)*H));
+      const eh = Math.max(4, Math.round((r.exp/maxV)*H));
+      const sh = Math.max(0, Math.round((r.sav/maxV)*H));
+      const T = (n) => fmt(n) + (S.lang==='fa'?' T':' T');
+      return `
+      <div class="bar-group">
+        <div class="bar-pair">
+          <div class="bar" style="height:${ih}px;background:linear-gradient(to top,var(--gold),rgba(232,184,75,.5))" data-tip="${T(r.inc)}"></div>
+          <div class="bar" style="height:${eh}px;background:linear-gradient(to top,var(--rose),rgba(244,63,94,.5))" data-tip="${T(r.exp)}"></div>
+          <div class="bar" style="height:${sh}px;background:linear-gradient(to top,var(--mint),rgba(13,217,160,.4))" data-tip="${T(r.sav)}"></div>
+        </div>
+        <div class="bar-month">${months[i]}</div>
+      </div>`;
+    }).join('');
+
+    // Donut + Table
+    const cats = expCats();
+    const circ = 251;
+    let off = 0;
+    cats.forEach((c, i) => {
+      const len = c.pct * circ;
+      const el = document.getElementById('dc' + (i+1));
+      if (el) {
+        el.style.stroke = c.color;
+        el.style.strokeDasharray = `${len} ${circ}`;
+        el.style.strokeDashoffset = -off;
+      }
+      off += len;
+    });
+    document.getElementById('donut-legend').innerHTML = cats.map(c => `
+      <div class="donut-row">
+        <div class="donut-dot" style="background:${c.color}"></div>
+        <div class="donut-name">${c.name}</div>
+        <div class="donut-pct">${Math.round(c.pct*100)}%</div>
+      </div>`).join('');
+    document.getElementById('exp-tbody').innerHTML = cats.map(c => {
+      const amt = Math.round(exp * c.pct);
+      return `
+      <tr>
+        <td><div class="exp-cat-cell"><div class="exp-color-dot" style="background:${c.color}"></div>${c.name}</div></td>
+        <td>
+          <div style="display:flex;align-items:center;gap:6px">
+            <div class="exp-bar-wrap"><div class="exp-bar-fill" style="width:${Math.round(c.pct*100)}%;background:${c.color}"></div></div>
+            <span style="font-size:10px;color:var(--t3)">${Math.round(c.pct*100)}%</span>
+          </div>
+        </td>
+        <td class="exp-amount">${fmtFull(amt)}</td>
+      </tr>`;
+    }).join('');
+
+    // Trend Line
+    const w0 = totalWealth() || 50e6;
+    const pts = MULTS.map((_,i) => Math.round(w0 * (0.7 + i*0.05 + Math.random()*.02)));
+    pts[pts.length-1] = w0;
+    const minV2 = Math.min(...pts) * 0.95;
+    const maxV2 = Math.max(...pts) * 1.05;
+    const W2 = 300, H2 = 78;
+    const px = (_,i) => Math.round((i/(pts.length-1)) * W2);
+    const py = v => Math.round(H2 - ((v-minV2)/(maxV2-minV2)) * H2 * .85 - H2*.07);
+    const pathD = pts.map((v,i) => `${i===0?'M':'L'}${px(v,i)},${py(v)}`).join(' ');
+    const areaD = pathD + ` L${W2},${H2} L0,${H2} Z`;
+    document.getElementById('trend-svg').innerHTML = `
+      <defs>
+        <linearGradient id="tgrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--gold)" stop-opacity=".25"/>
+          <stop offset="100%" stop-color="var(--gold)" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <path d="${areaD}" fill="url(#tgrad)"/>
+      <path d="${pathD}" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+      ${pts.map((v,i) => `<circle cx="${px(v,i)}" cy="${py(v)}" r="3" fill="var(--gold)" opacity=".8"/>`).join('')}`;
+    const ml = S.lang === 'fa' ? MONTHS_FA : MONTHS_EN;
+    document.getElementById('trend-labels').innerHTML = ml.map(m =>
+      `<span class="trend-label">${m}</span>`).join('');
+  },
+
+  // ── Render: Market / AI ──
+  renderMarket() {
+    const inc = S.user.income || 25e6;
+    const exp = S.user.expense || 15e6;
+    const sav = Math.max(0, inc - exp);
+    const sr  = inc > 0 ? Math.round(((inc-exp)/inc)*100) : 0;
+    const w   = totalWealth();
+    const mo  = w > 0 && exp > 0 ? Math.round(w/exp) : 0;
+    const sc  = calcScore();
+
+    // AI Ratios
+    const ratios = [
+      { l: L('نسبت DTI','Debt-to-Income'), v:'0%', n: L('✓ ایده‌آل','✓ Ideal'), c:'var(--mint)' },
+      { l: L('نرخ پس‌انداز','Savings Rate'), v: fmtPct(sr), n: sr>=20?L('✓ خوب','✓ Good'):L('⚠ کم','⚠ Low'), c: sr>=20?'var(--mint)':'var(--rose)' },
+      { l: L('پوشش اضطراری','Emergency Cover'), v: mo+'mo', n: mo>=6?L('✓ کافی','✓ OK'):L('⚠ ناکافی','⚠ Low'), c: mo>=6?'var(--mint)':'var(--amber)' },
+      { l: L('ظرفیت وام','Loan Capacity'), v: fmt(inc*.35), n: L('تومان/ماه','Toman/mo'), c:'var(--blue)' },
+    ];
+    document.getElementById('ai-ratios').innerHTML = ratios.map(r => `
+      <div class="ai-ratio">
+        <div class="ai-ratio-label">${r.l}</div>
+        <div class="ai-ratio-value" style="color:${r.c}">${r.v}</div>
+        <div class="ai-ratio-note">${r.n}</div>
+      </div>`).join('');
+
+    // AI Recs
+    const recs = [];
+    if (sr < 30) recs.push({ i:'💡', t: L(
+      `<strong>افزایش پس‌انداز:</strong> کاهش ۱۰٪ هزینه = ${fmt(exp*.1)} تومان پس‌انداز بیشتر/ماه.`,
+      `<strong>Boost savings:</strong> Cut expenses 10% = ${fmt(exp*.1)} extra Toman/month.`) });
+    if (S.assets.length < 3) recs.push({ i:'📊', t: L(
+      '<strong>تنوع‌سازی:</strong> افزودن کریپتو، طلا و سهام ریسک را کاهش می‌دهد.',
+      '<strong>Diversify:</strong> Adding crypto, gold & stocks reduces concentration risk.') });
+    recs.push({ i:'🏦', t: L(
+      `<strong>وام:</strong> با DTI ۰٪، ظرفیت قسط تا ${fmt(inc*.35)} تومان/ماه.`,
+      `<strong>Loan:</strong> With 0% DTI, you can service up to ${fmt(inc*.35)} T/month.`) });
+    recs.push({ i:'📈', t: L(
+      `<strong>DCA کریپتو:</strong> ${fmt(sav*.1)} تومان/ماه در BTC/ETH ≈ ${(sav*.1/S.prices.usd/10/S.prices.btc).toFixed(5)} BTC.`,
+      `<strong>DCA Crypto:</strong> ${fmt(sav*.1)} T/month into BTC/ETH ≈ ${(sav*.1/S.prices.usd/10/S.prices.btc).toFixed(5)} BTC.`) });
+    document.getElementById('ai-recs').innerHTML = recs.map(r =>
+      `<div class="ai-rec"><div class="ai-rec-icon">${r.i}</div><div class="ai-rec-text">${r.t}</div></div>`).join('');
+
+    // Products
+    const prods = [
+      {
+        ico:'₿', ibg:'rgba(247,147,26,.12)',
+        bdg: L('پرریسک','High Risk'), bc:'var(--rose)', bb:'var(--roseA)',
+        title: L(`بیتکوین — $${S.prices.btc.toLocaleString()}`, `Bitcoin — $${S.prices.btc.toLocaleString()}`),
+        cat: L('رمزارز','Cryptocurrency'),
+        desc: L(
+          `AI: با ${fmt(sav*.1)} تومان/ماه DCA کنید. معادل ${(sav*.1/S.prices.usd/10/S.prices.btc).toFixed(5)} BTC ماهانه.`,
+          `AI: DCA ${fmt(sav*.1)} T/month = ${(sav*.1/S.prices.usd/10/S.prices.btc).toFixed(5)} BTC monthly.`
+        ),
+        stats:[{v:'$'+S.prices.btc.toLocaleString(),l:'Price'},{v:'+124%',l:'1Y'},{v:'10%',l:'Alloc'}],
+        cta: L('شروع خرید','Buy Now'), cc:'#F7931A', ct:'#000'
+      },
+      {
+        ico:'🥇', ibg:'var(--goldAA)',
+        bdg: L('کم‌ریسک','Low Risk'), bc:'var(--gold)', bb:'var(--goldAA)',
+        title: L('سکه طلا — محافظ تورم','Gold Coin — Inflation Hedge'),
+        cat: L('طلا','Gold'),
+        desc: L(
+          `بهترین سپر ارزش در تورم ایران. ۲۰٪ پرتفوی = ${fmt(w*.2)} تومان.`,
+          `Best inflation hedge in Iran. 20% portfolio = ${fmt(w*.2)} Toman.`
+        ),
+        stats:[{v:'~30%',l:L('بازده','Annual')},{v:L('خیلی کم','Very Low'),l:L('ریسک','Risk')},{v:'XAU',l:'Symbol'}],
+        cta: L('خرید سکه','Buy Gold'), cc:'var(--gold)', ct:'#000'
+      },
+      {
+        ico:'📈', ibg:'var(--violetA)',
+        bdg: L('سهام','Stocks'), bc:'var(--violet)', bb:'var(--violetA)',
+        title: L(`بورس تهران — امتیاز ${sc}/100`, `Tehran Stock Exchange — Score ${sc}/100`),
+        cat: L('سهام','Stocks'),
+        desc: L(
+          `AI: پتروشیمی، فلزات، بانکی. بازده تاریخی ۸۰٪+. با ${fmt(sav*.2)} تومان شروع کنید.`,
+          `AI: Petrochems, metals, banking. 80%+ historical. Start with ${fmt(sav*.2)} T.`
+        ),
+        stats:[{v:'80%+',l:L('تاریخی','Hist.')},{v:L('متوسط','Med'),l:L('ریسک','Risk')},{v:'TSE',l:'Market'}],
+        cta: L('مشاوره','Get Advice'), cc:'var(--violet)', ct:'#fff'
+      },
+      {
+        ico:'🏠', ibg:'var(--mintA)',
+        bdg: L('کم‌ریسک','Low Risk'), bc:'var(--mint)', bb:'var(--mintA)',
+        title: L('صندوق زمین و ساختمان','Real Estate Fund (REIT)'),
+        cat: L('صندوق سرمایه‌گذاری','REIT'),
+        desc: L(
+          `بازده ۳۵-۴۵٪ سالانه. حداقل ۱۰M تومان. مناسب برای ${fmt(inc*3)} تومان پس‌انداز اول.`,
+          `35-45% annual return. Min 10M T. Good for first ${fmt(inc*3)} Toman saved.`
+        ),
+        stats:[{v:'35-45%',l:L('بازده','Return')},{v:L('کم','Low'),l:L('ریسک','Risk')},{v:'REIT',l:'Type'}],
+        cta: L('اطلاعات','Learn More'), cc:'var(--mint)', ct:'#000'
+      },
+    ];
+    document.getElementById('products-list').innerHTML = prods.map(p => `
+      <div class="product-card">
+        <div class="prod-header">
+          <div class="prod-icon" style="background:${p.ibg}">${p.ico}</div>
+          <div><div class="prod-title">${p.title}</div><div class="prod-cat">${p.cat}</div></div>
+        </div>
+        <div class="prod-badge" style="color:${p.bc};background:${p.bb}">${p.bdg}</div>
+        <div class="prod-desc">${p.desc}</div>
+        <div class="prod-stats">${p.stats.map(s => `
+          <div class="prod-stat">
+            <div class="prod-stat-val">${s.v}</div>
+            <div class="prod-stat-label">${s.l}</div>
+          </div>`).join('')}
+        </div>
+        <button class="prod-cta" style="background:${p.cc};color:${p.ct}" onclick="App.toast('${L('بزودی...','Coming soon...')}')">
+          ${p.cta}
+        </button>
+      </div>`).join('');
+  },
+
+  // ── Render All ──
+  renderAll() {
+    this.updateAvatars();
+    this.renderHomeBalance();
+    this.renderInsights();
+    this.renderWealth();
+    this.renderAccounts();
+    this.renderMarket();
+  },
+
+  // ── Asset Modal ──
+  openAssetModal() {
+    S.selAssetType = 're';
+    document.querySelectorAll('.asset-chip').forEach((c,i) => c.classList.toggle('sel', i===0));
+    document.getElementById('fields-cr').classList.remove('show');
+    document.getElementById('fields-fx').classList.remove('show');
+    document.getElementById('fields-fiat').classList.add('show');
+    ['m-btc','m-eth','m-usd','m-eur','m-val','m-desc'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    document.getElementById('asset-modal').classList.add('open');
+  },
+
+  closeAssetModal() { document.getElementById('asset-modal').classList.remove('open'); },
+
+  selectAssetType(el) {
+    document.querySelectorAll('.asset-chip').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+    S.selAssetType = el.dataset.type;
+    const isCr = S.selAssetType === 'cr';
+    const isFx = S.selAssetType === 'fx';
+    document.getElementById('fields-cr').classList.toggle('show', isCr);
+    document.getElementById('fields-fx').classList.toggle('show', isFx);
+    document.getElementById('fields-fiat').classList.toggle('show', !isCr && !isFx);
+  },
+
+  saveAsset() {
+    const type = S.selAssetType;
+    const now = Date.now();
+    const icoMap = { re:'🏠', ve:'🚗', gj:'💎', cr:'₿', fx:'💵', st:'📈', dp:'🏦', ca:'💰' };
+    const ico = icoMap[type] || '💰';
+    let added = false;
+
+    if (type === 'cr') {
+      const btc = parseFloat(document.getElementById('m-btc').value) || 0;
+      const eth = parseFloat(document.getElementById('m-eth').value) || 0;
+      if (btc > 0) { S.assets.push({ id:now,   ico:'₿', type:'cr', name:'Bitcoin',  val:0, qty:btc, sym:'btc' }); added=true; }
+      if (eth > 0) { S.assets.push({ id:now+1,  ico:'Ξ', type:'cr', name:'Ethereum', val:0, qty:eth, sym:'eth' }); added=true; }
+    } else if (type === 'fx') {
+      const usd = parseFloat(document.getElementById('m-usd').value) || 0;
+      const eur = parseFloat(document.getElementById('m-eur').value) || 0;
+      if (usd > 0) { S.assets.push({ id:now,   ico:'💵', type:'fx', name:'USD', val:0, qty:usd, sym:'usd' }); added=true; }
+      if (eur > 0) { S.assets.push({ id:now+1, ico:'💶', type:'fx', name:'EUR', val:0, qty:eur, sym:'eur' }); added=true; }
+    } else {
+      const val  = parseFloat(document.getElementById('m-val').value) || 0;
+      const desc = document.getElementById('m-desc').value.trim() || L('دارایی','Asset');
+      if (val > 0) { S.assets.push({ id:now, ico, type, name:desc, val, qty:0, sym:'' }); added=true; }
+    }
+
+    if (!added) { this.toast(L('مقدار را وارد کنید','Please enter an amount')); return; }
+    DB.save();
+    this.closeAssetModal();
+    this.renderWealth();
+    this.renderHomeBalance();
+    this.toast(L('دارایی ذخیره شد ✓','Asset saved ✓'));
+  },
+
+  // ── Settings ──
+  openSettings() { document.getElementById('settings-overlay').classList.add('open'); },
+  closeSettings() { document.getElementById('settings-overlay').classList.remove('open'); },
+
+  editProfile() {
+    document.getElementById('p-name').value    = S.user.name || '';
+    document.getElementById('p-income').value  = S.user.income || '';
+    document.getElementById('p-expense').value = S.user.expense || '';
+    document.getElementById('profile-modal').classList.add('open');
+    this.closeSettings();
+  },
+  closeProfileModal() { document.getElementById('profile-modal').classList.remove('open'); },
+  saveProfile() {
+    const name    = document.getElementById('p-name').value.trim();
+    const income  = parseFloat(document.getElementById('p-income').value) || 0;
+    const expense = parseFloat(document.getElementById('p-expense').value) || 0;
+    if (!name) { this.toast(L('نام را وارد کنید','Name required')); return; }
+    S.user = { name, income, expense };
+    DB.save();
+    this.closeProfileModal();
+    this.renderAll();
+    this.toast(L('پروفایل ذخیره شد ✓','Profile saved ✓'));
+  },
+
+  clearData() {
+    if (!confirm(L('همه داده‌ها پاک شود؟','Clear all data?'))) return;
+    localStorage.removeItem('nx3_state');
+    location.reload();
+  },
+
+  showNotif() { this.toast(L('اعلان جدیدی ندارید','No new notifications')); },
+
+  // ── Toast ──
+  toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2400);
+  },
+
+  // ── Init ──
+  init() {
+    const loaded = DB.load();
+    if (loaded && S.user.name) {
+      document.body.className = 'lang-' + S.lang;
+      document.documentElement.dir = S.lang === 'fa' ? 'rtl' : 'ltr';
+      this.launch();
+    } else {
+      document.getElementById('s-lang').classList.add('active');
+    }
+
+    // Close modals on overlay click
+    document.getElementById('asset-modal').addEventListener('click', e => {
+      if (e.target === e.currentTarget) this.closeAssetModal();
+    });
+    document.getElementById('settings-overlay').addEventListener('click', e => {
+      if (e.target === e.currentTarget) this.closeSettings();
+    });
+    document.getElementById('profile-modal').addEventListener('click', e => {
+      if (e.target === e.currentTarget) this.closeProfileModal();
+    });
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => App.init());
+</script>
+</body>
+</html>
